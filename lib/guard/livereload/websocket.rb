@@ -12,8 +12,6 @@ module Guard
           super #pass the request to websocket
         elsif parser.request_path == '/livereload.js'
           serve_file File.expand_path("../../../../js/livereload.js", __FILE__)
-        elsif File.exist?(parser.request_path[1..-1])
-          serve_file parser.request_path[1..-1] # Strip leading slash
         else
           send_data "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nContent-Length: 13\r\n\r\n404 Not Found"
           close_connection_after_writing
