@@ -1,6 +1,7 @@
 require 'eventmachine'
 require 'em-websocket'
 require "http/parser"
+require 'uri'
 
 module Guard
   class LiveReload
@@ -10,7 +11,7 @@ module Guard
         parser << data
         if parser.http_method != 'GET' || parser.upgrade?
           super #pass the request to websocket
-        elsif parser.request_path == '/livereload.js'
+        elsif URI.parse(parser.request_url).path == '/livereload.js'
           serve_file File.expand_path("../../../../js/livereload.js", __FILE__)
         else
           send_data "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nContent-Length: 13\r\n\r\n404 Not Found"
